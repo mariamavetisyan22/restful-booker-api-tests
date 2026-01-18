@@ -1,7 +1,12 @@
 import pytest
+
+from config import Config
 from utils.api_client import APIClient
 from utils.data_generator import generate_booking_data
 
+@pytest.fixture(scope="module")
+def ping_response(api_client):
+    return api_client.get(Config.PING_ENDPOINT)
 
 @pytest.fixture(scope="session")
 def api_client():

@@ -7,10 +7,13 @@ class TestPing:
         assert ping_response.status_code in (200, 201), (
             f"Unexpected status code: {ping_response.status_code}"
         )
-
-    def test_healthcheck_response_message(self, api_client, ping_response):
         assert ping_response.text in ("OK", "Created"), (
             f"Unexpected response body: {ping_response.text!r}"
+        )
+
+    def test_healthcheck_response_time(self, api_client, ping_response):
+        assert ping_response.elapsed.total_seconds() < 1, (
+            f"Response time exceeded: {ping_response.elapsed.total_seconds()}s"
         )
 
     def test_healthcheck_content_type(self, api_client, ping_response):

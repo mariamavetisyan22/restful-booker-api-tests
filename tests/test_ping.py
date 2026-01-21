@@ -1,8 +1,13 @@
+from venv import logger
+
 import pytest
 from config import Config
+import logging
 
 # Test the /ping endpoint to ensure the API is running.
 class TestPing:
+
+    @pytest.mark.case_id("PING-001")
     def test_healthcheck_status(self, api_client, ping_response):
         assert ping_response.status_code in (200, 201), (
             f"Unexpected status code: {ping_response.status_code}"
@@ -10,16 +15,20 @@ class TestPing:
         assert ping_response.text in ("OK", "Created"), (
             f"Unexpected response body: {ping_response.text!r}"
         )
+        logging.debug("RESPONSE: %s", ping_response.status_code)
 
+    @pytest.mark.case_id("PING-002")
     def test_healthcheck_response_time(self, api_client, ping_response):
         assert ping_response.elapsed.total_seconds() < 1, (
             f"Response time exceeded: {ping_response.elapsed.total_seconds()}s"
         )
 
+    @pytest.mark.case_id("PING-003")
     def test_healthcheck_content_type(self, api_client, ping_response):
         assert "Content-Type" in ping_response.headers, "Missing 'Content-Type' header"
         assert ping_response.headers["Content-Type"].strip(), "Content-Type header is empty"
 
+    @pytest.mark.case_id("PING-004")
     def test_healthcheck_no_auth(self, api_client):
         response = api_client.get(Config.PING_ENDPOINT, headers={})
         assert response.status_code not in (401, 403), (

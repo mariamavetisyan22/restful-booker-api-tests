@@ -15,8 +15,8 @@
 | AUTH-001 | Valid credentials (username:  admin, password: password123) | High | **200 OK** | `{"token": "abc123"}` | ✔️ | Token string returned |
 | AUTH-002 | Invalid username | High | **200 OK** | `{"reason": "Bad credentials"}` | ❌ | Note: API returns 200, not 401 |
 | AUTH-003 | Invalid password | High | **200 OK** | `{"reason": "Bad credentials"}` | ❌ | Note: API returns 200, not 401 |
-| AUTH-004 | Missing username field | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | |
-| AUTH-005 | Missing password field | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | |
+| AUTH-004 | Missing username field | High | **200 OK** | `{"reason": "Bad credentials"}` | ❌ | |
+| AUTH-005 | Missing password field | High | **200 OK** | `{"reason": "Bad credentials"}` | ❌️ | |
 | AUTH-006 | Empty username | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | |
 | AUTH-007 | Empty password | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | |
 | AUTH-008 | Empty request body | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | |

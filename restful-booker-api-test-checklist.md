@@ -11,24 +11,30 @@
 ### **POST /auth** - Create Authentication Token
 
 | ID | Test Case | Priority | Expected Status | Expected Response | Status | Notes |
-|----|-----------|----------|----------------|-------------------|-----|-------|
-| AUTH-001 | Valid credentials (username:  admin, password: password123) | High | **200 OK** | `{"token": "abc123"}` | ✔️ | Token string returned |
+|----|-----------|----------|----------------|-------------------|--------|-------|
+| AUTH-001 | Valid credentials (username: admin, password: password123) | High | **200 OK** | `{"token": "abc123"}` | ✔️ | Token string returned |
 | AUTH-002 | Invalid username | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | Note: API returns 200, not 401 |
 | AUTH-003 | Invalid password | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | Note: API returns 200, not 401 |
 | AUTH-004 | Missing username field | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | |
-| AUTH-005 | Missing password field | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️️ | |
+| AUTH-005 | Missing password field | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | |
 | AUTH-006 | Empty username | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | |
 | AUTH-007 | Empty password | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | |
 | AUTH-008 | Empty request body | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | |
 | AUTH-009 | Null values for credentials | Medium | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | |
-| AUTH-010 | SQL injection in username | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | Security test |
-| AUTH-011 | XSS payload in username | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | Security test |
-| AUTH-012 | Very long username (1000+ chars) | Low | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | Boundary test |
-| AUTH-013 | Special characters in credentials | Medium | **200 OK** | Valid response based on actual credentials | ✔️ | |
+| AUTH-010 | SQL injection in username (multiple payloads) | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | Security test - parametrized |
+| AUTH-011 | XSS payload in username (multiple payloads) | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | Security test - parametrized |
+| AUTH-012 | Very long username (1000+ chars) | Low | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | Boundary test - parametrized (1001, 5000, 10000) |
+| AUTH-013 | Special characters in credentials | Medium | **200 OK** | Valid response based on actual credentials | ✔️ | Parametrized with various special chars |
 | AUTH-014 | Response time < 2000ms | Medium | **200 OK** | Response within acceptable time | ✔️ | Performance |
 | AUTH-015 | Token format validation | High | **200 OK** | Token is alphanumeric string | ✔️ | Verify token structure |
-| AUTH-016 | Content-Type header validation | Medium | **200 OK** | Response header:  `application/json` | ✔️ | |
-| AUTH-017 | Invalid Content-Type in request | Low | **200/415** | Error or Bad credentials | ✔️ | |
+| AUTH-016 | Content-Type header validation | Medium | **200 OK** | Response header: `application/json` | ✔️ | |
+| AUTH-017 | Invalid Content-Type in request | Low | **400/415** | Error or rejection | ✔️ | Should reject invalid Content-Type |
+| AUTH-018 | Token uniqueness across requests | High | **200 OK** | Each request generates unique token | ✔️ | Generate 3 tokens, verify all unique |
+| AUTH-019 | Case sensitivity of credentials | High | **200 OK** | `{"reason": "Bad credentials"}` | ✔️ | Test ADMIN, PASSWORD123, etc. |
+| AUTH-020 | Whitespace handling in credentials | Medium | **200/401** | Trim or reject whitespace | ✔️ | Leading/trailing spaces |
+| AUTH-021 | Rate limiting check | Medium | **200/429** | Detect rate limiting after multiple failures | ✔️ | 10 rapid failed auth attempts |
+| AUTH-022 | Token expiration validation | Medium | **200 OK** | Token works immediately after creation | ✔️ | Verify token validity |
+| AUTH-023 | Concurrent authentication requests | Low | **200 OK** | All concurrent requests succeed | ✔️ | 5 simultaneous auth requests |
 
 **Request Example:**
 ```json
